@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+    <title>Wufei Ma - PRML - Probability Distributions</title>
+
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta property="og:url" content="https://wufeim.github.io/posts/prml/c2.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="wufeim/PRML/Probability Distributions" />
+    <meta property="og:description" content="A brief survey of deep ensembles." />
+
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+    <!-- <script id="MathJax-script" async src="js/tex-mml-svg.js"></script> -->
+    <script>
+        MathJax = {
+            tex: {
+                inlineMath: [['$', '$']]
+            }
+        }
+    </script>
+</head>
+
+<body>
+<div class="container" id="main" style="padding-top: 20pt; padding-bottom: 30pt;">
+
+    <div class="row">
+        <h1 class="col-md-12 text-center">
+            <b>PRML - Probability Distributions</b></br>
+            <small>Feb, 2021</small>
+        </h2>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <ul class="list-inline">
+                <li>
+                    <a href="https://wufeim.github.io">Wufei Ma</a>
+                    <br />Purdue University
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h2>Abstract</h2>
+            <!-- <image src="img/compression.jpg" class="img-responsive" alt="overview" style="height: 128px; display: block; margin-left: auto; margin-right: auto;"><br> -->
+            <p class="text-justify">
+                Probability distributions can be used to model the distribution $p(s)$ of a random variable $x$, given a finite set $x_1, \dots, x_N$ of observations. This is known as <i>density estimation</i>. We shall assume that the data points are independent and identically distributed. It should be noted that the problem of density estimation is fundamentally ill-posed, because there are infinitely many probability distributions that could have given rise to the observed finite data set. The issue of choosing an appropriate distribution relates to the problem of <i>model selection</i>.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h3>2.1 Binary Variables</h3>
+            <p>
+                We begin by considering a single binary random variable $x \in \{0, 1\}$. The probability of $x=1$ will be denoted by the parameter $\mu$ and the probability distribution over $x$ can therefore be written in the form
+                \[\mathrm{Bern}(x \mid \mu) = \mu^x (1-\mu)^{1-x}\]
+                which is known as the <i>Bernoulli distribution</i>. It has mean and variance given by
+                \[\begin{align*}
+                \mathbb{E}[x] & = \mu \cdot 1 + (1-\mu) \cdot 0 = \mu \\ \mathrm{var}[x] & = \mu \cdot (1-\mu)^2 + (1-\mu) \cdot (0-\mu)^2 = \mu(1-\mu)
+                \end{align*}\]
+                Suppose we have a data set $\mathcal{D} = \{x_1, \dots, x_N\}$ of observed values of $x$, we can construct the likelihood function on the assumption that the observations are drawn independently from $p(x \mid \mu)$, so that
+                \[p(\mathcal{D} \mid \mu) = \prod_{n=1}^N p(x_n \mid \mu) = \prod_{n=1}^N \mu^{x_n}(1-\mu)^{1-x_n}\]
+                In a frequentist setting, we can estimate $\mu$ by maximizing the likelihood function. It follows that
+                \[\begin{align*}\ln p(\mathcal{D} \mid \mu) & = \sum_{n=1}^N \ln p(x_n \mid \mu) = \sum_{n=1}^N \{x_n \ln \mu + (1-x_n)\ln(1-\mu)\} \\
+                & = \sum_n x_n \cdot \ln \mu + (N-\sum_n x_n) \ln (1-\mu)\end{align*}\]
+                Note that the log likelihood function only depends on the sum of the $N$ observations, $\sum_n x_n$, which is an example of a <i>sufficient statistic</i>. The maximum likelihood estimator is given by
+                \[\begin{align*}&\sum_n x_n \frac{1}{\mu} - (N - \sum_n x_n) \frac{1}{1-\mu} = 0 \\
+                &\sum_n x_n (1-\mu) - (N - \sum_n x_n)\mu = 0 \\
+                &\mu_\text{ML} = \frac{1}{N} \sum_{n=1}^N x_n\end{align*}\]
+                Suppose we flip a coin three times and observe three heads. In this case we have $\mu_\text{ML} = 1$. This is an example of over-fitting and we can achieve a more sensible conclusion through the induction of a prior distribution over $\mu$.
+            </p>
+            <p>
+                This distribution of the number $m$ of observations of $x=1$ given that the data set has size $N$ is given by the <i>binomial</i> distribution, and can be written
+                \[\mathrm{Bin}(m \mid N, \mu) = \mathrm{C}_N^m \mu^m (1-\mu)^{N-m}\]
+                Since for independent events, the mean of the sum is the sum of the means, and the variance of the sum is the sum of the variances (see Ex. 1.10), we have
+                \[\begin{align*}\mathbb{E}[m] & = N\mu \\
+                \mathrm{var}[m] & = N\mu(1-\mu)\end{align*}\]
+            </p>
+            <h4>2.1.1 The beta distribution</h4>
+            <p>
+                In order to develop a Bayesian treatment for the over-fitting problem above, we need to introduce a prior distribution $p(\mu)$. Here we consider a form of prior distribution that has a simple interpretation as well as some useful analytical properties. The <i>beta</i> distribution is given by
+                \[\mathrm{Beta}(\mu \mid a, b) = \frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1}\]
+                where
+                \[\Gamma(x) \equiv \int_0^\infty \mu^{x-1}e^{-u}du\]
+                and the gamma function ensures the beta distribution is normalized. The mean and variance are given by
+                \[\begin{align*}\mathbb{E}[\mu] & = \frac{a}{a+b} \\
+                \mathrm{var}[\mu] & = \frac{ab}{(a+b)^2(a+b+1)}\end{align*}\]
+            </p>
+            <p>
+                The posterior distribution of $\mu$ is now obtained by multiplying the beta prior by the binomial likelihood function and normalizing. We have
+                \[p(\mu \mid m, l, a, b) \propto \mu^{m+a-1}(1-\mu)^{l+b-1}\]
+                We see that the posterior distribution has the same functional dependence on $\mu$ as the prior distribution, which is called the <i>conjugacy</i> property. Here the hyperparameters $a$ and $b$ serve as an effective number of observations of $x=1$ and $x=0$, and we can sequentially update the posterior as we make more observations.
+            </p>
+            <p>
+                If our goal is to predict, we must evaluate the predictive distribution of $x$, given the observed data set $\mathcal{D}$. We have
+                \[p(x=1 \mid \mathcal{D}) = \int_0^1 p(x=1 \mid \mu)p(\mu \mid \mathcal{D})d\mu = \int_0^1 \mu p(\mu \mid \mathcal{D})d\mu = \mathbb{E}[\mu \mid \mathcal{D}] = \frac{m+a}{m+a+l+b}\]
+                In the limit of an infinitely large data set $m, l \to \infty$ the result reduces to the maximum likelihood result. It is a very general property that the Bayesian and maximum likelihood results will agree in the limit of an infinitely large data set.
+            </p>
+            <p>
+                Note that the variance of the beta distribution goes to zero for $a \to \infty$ and $b \to \infty$. We see that as we observe more and more data, the uncertainty represented by the posterior distribution will steadily decrease. Consider a general Bayesian inference problem for a parameter $\theta$ with data set $\mathcal{D}$, given by the distribution $p(\theta, \mathcal{D})$. It follows that
+                \[\begin{align*}
+                \mathbb{E}_\theta[\theta] & = \mathbb{E}_\mathcal{D}[\mathbb{E}_\theta[\theta\mid\mathcal{D}]] \\
+                \mathbb{E}_\theta[\theta] & \equiv \int p(\theta)\theta d\theta \\
+                \mathbb{E}_\mathcal{D}[\mathbb{E}_\theta[\theta\mid\mathcal{D}]] & \equiv \int \left\{ \int \theta p(\theta\mid\mathcal{D}) d\theta \right\} p(\mathcal{D}) d\mathcal{D}
+                \end{align*}\]
+                which means the posterior mean of $\theta$, averaged over the distribution generating the data, is equal to the prior mean of $\theta$. Similary, we have
+                \[\mathrm{var}_\theta[\theta] = \mathbb{E}_\mathcal{D}[\mathrm{var}_\theta[\theta\mid\mathcal{D}]] + \mathrm{var}_\mathcal{D}[\mathbb{E}_\theta[\theta\mid\mathcal{D}]]\]
+                which says the prior variance of $\theta$ can be written as the sum of the average posterior variance of $\theta$ and the variance in the posterior mean of $\theta$. This means, on average, the posterior varaince of $\theta$ is smaller than the prior variance.
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h3>2.2 Multinomial Variables</h3>
+            <p>
+                We often encounter variables that can take on one of $K$ possible mutually exclusive states. It is convenient to represent them with a $K$-dimensional one-hot vector. If we denote the probability of $x_k=1$ by the parameter $\mu_k$, then the distribution of $x$ is given
+                \[p(x \mid \mu) = \prod_{k=1}^K \mu_k^{x_k}\]
+                and we have $\sum_k \mu_k = 1$.
+            </p>
+            <p>
+                Now consider a dat set $\mathcal{D}$ of $N$ independent observations. The corresponding likelihood function takes the form
+                \[p(\mathcal{D} \mid \mu) = \prod_{n=1}^N \prod_{k=1}^K \mu_k^{x_{nk}} = \prod_{k=1}^K \mu_k^{\sum_n x_{nk}} = \prod_{k=1}^K \mu_k^{m_k}\]
+                We see that the sufficient statistics for this distribution is the $K$ quantiles given by
+                \[m_k = \sum_n x_{nk}\]
+            </p>
+            <p>
+                The maximum likelihood solution for $\mu$ can be found be maximizing the log likelihood with the constraint that $\mu_k$ sums to one
+                \[\sum_{k=1}^K m_k \ln \mu_k + \lambda \cdot \left( \sum_{k=1}^K \mu_k - 1 \right)\]
+                and we obtain
+                \[\begin{align*}\frac{m_k}{\mu_k} + \lambda = 0\\
+                \mu_k = -m_k/\lambda\\
+                \end{align*}\]
+                Since $\sum_k \mu_k=1$, we have $\lambda = -N$ and the maximum likelihood function is $\mu_k^\text{ML} = \frac{m_k}{N}$.
+            </p>
+            <p>
+                The joint distribution of $m_k$ conditioned on $\mu$ and the $N$ observations is
+                \[\mathrm{Multi}(m_1, \dots, m_k \mid \mu, N) = \mathrm{C}_{m_1\dots m_K}^N \prod_{k=1}^K \mu_k^{m_k}\]
+                and is known as the <i>multinomial</i> distribution.
+            </p>
+            <h4>2.2.1 The Dirichlet distribution</h4>
+            <p>
+                We now introduce a family of conjugate prior distributions for the parameters $\{\mu_k\}$ of the multinomial distribution. The normalized form of the distribution is by
+                \[\mathrm{Dir}(\mu \mid \alpha) = \frac{\Gamma(\alpha_0)}{\Gamma(\alpha_1) \cdots \Gamma(\alpha_K)} \prod_{k=1}^K \mu_k^{\alpha_k-1}\]
+                Note that, because of the summation constraint, the distribution over the space of the $\{\mu_k\}$ is confined to a <i>simplex</i> (a bounded linear manifold) of dimensionality $K-1$.
+            </p>
+            <p>
+                Multiplying the prior by the likelihood function, we obtain the posterior distribution of the parameter $\{\mu_k\}$
+                \[p(\mu \mid \mathcal{D}, \alpha) \propto p(\mathcal{D} \mid \mu) p(\mu \mid \alpha) \propto \prod_{k=1}^K \mu_k^{\alpha_k + m_k -1}\]
+                and the normalized form is
+                \[p(\mu \mid \mathcal{D}, \alpha) = \mathrm{Dir}(\mu \mid \alpha + m) = \frac{\Gamma(\alpha_0 + N)}{\Gamma(\alpha_1+m_1)\cdots\Gamma(\alpha_K+m_K)} \prod_{k=1}^K \mu_k^{\alpha_k+m_k-1}\]
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h3>2.3 The Gaussian Distribution</h3>
+            <p>
+                The Gaussian, also known as the normal distribution, can be written in the form
+                \[\mathcal{N}(x \mid \mu, \sigma^2) = \frac{1}{(2\pi\sigma^2)^{1/2}} \exp\left\{-\frac{1}{2\sigma^2} (x-\mu)^2\right\}\]
+                where $\mu$ is the mean and $\sigma^2$ is the variance. For a $D$-dimensional vector $x$, the multivariate Gaussian distribution takes the form
+                \[\mathcal{N}(\mathbf{x} \mid \mu, \Sigma) = \frac{1}{(2\pi)^{D/2}} \frac{1}{\lvert\Sigma\rvert^{1/2}} \exp \left\{-\frac{1}{2}(\mathbf{x}-\mu)^\top\Sigma^{-1}(\mathbf{x}-\mu)\right\}\]
+            </p>
+            <p>
+                Consider the geometrical form of the Gaussian distribution. The functional dependence of the Gaussian on $\mathbf{x}$ is through the quadratic form
+                \[\Delta^2 = (\mathbf{x}-\mu)^\top \Sigma^{-1}(\mathbf{x} - \mu)\]
+                The quantity $\Delta$ is called the <i>Mahalanobis distance</i> from $\mu$ to $x$. Without loss of generality, we let $\Sigma$ to be symmetric since any antisymmetric component would disappear from the exponent (see Ex. 2.17). Consider the eigenvector equation for $\Sigma$
+                \[\Sigma \mathbf{u}_i = \lambda_i\mathbf{u}_i\]
+                and let $\mathbf{u}_i^\top \mathbf{u}_j = I_{ij}$. It follows that
+                \[\begin{align*}\Sigma = \sum_{i=1}^D \lambda_i \mathbf{u}_i\mathbf{u}_i^\top \\
+                \Sigma^{-1} = \sum_{i=1}^D \frac{1}{\lambda_i} \mathbf{u}_i\mathbf{u}_i^\top \end{align*}\]
+                Substituting back we obatin
+                \[\Delta^2 = \sum_{i=1}^D \frac{y_i^2}{\lambda_i}\]
+                where
+                \[y_i = \mathbf{u}_i^\top(\mathbf{x} - \mu)\]
+                We can interpret $\{y_i\}$ as a new coordinate defined by $\mathbf{y} = \mathbf{U}(\mathbf{x} - \mu)$. The Gaussian density will be constant on surfaces for which $y_i$ is constant. If all the eigenvalues $\lambda_i$ are positive, then these surfaces represent ellipsoids, as illustrated below.
+            </p>
+            <image src="figures/c2-1.png" class="img-responsive" alt="overview" style="height: 220px; display: block; margin-left: auto; margin-right: auto;"><br />
+            <p>
+                In going from the $\mathbf{x}$ to the $\mathbf{y}$ coordinate system, we have a Jacobian matrix $\mathbf{J}$ given by
+                \[J_{ij} = \frac{\partial x_i}{\partial y_j} = U_{ji}\]
+                It follows that
+                \[\lvert \mathbf{J} \rvert^2 = \lvert \mathbf{U}^\top \rvert^2 = \lvert \mathbf{U}^\top \rvert\lvert\mathbf{U}\rvert = \lvert\mathbf{U}^\top\mathbf{U}\rvert = 1\]
+                and
+                \[\lvert\Sigma\rvert^{1/2} = \prod_{j=1}^D \lambda_j^{1/2}\]
+                Thus in the $y_j$ coordinate system, the Gaussian distribution takes the form
+                \[p(\mathbf{y}) = p(\mathbf{x})\lvert\mathbf{J}\rvert = \prod_{j=1}^D \frac{1}{(2\pi\lambda_j)^{1/2}} \exp \left\{-\frac{y_j^2}{2\lambda_j}\right\}\]
+                which is the product of $D$ independent univariate Gaussian distributions. Since
+                \[\int p(\mathbf{y}) d\mathbf{y} = \prod_{j=1}^D \int_{-\infty}^\infty \frac{1}{(2\pi\lambda_j)^{1/2}} \exp \left\{-\frac{y_j^2}{2\lambda_j}\right\}dy_j = 1\]
+                we have shown that the multivariate Gaussian distribution is indeed normalized.
+            </p>
+            <p>
+                The expectation of $\mathbf{x}$ is given by
+                \[\mathbb{E}[\mathbf{x}] = \]
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <h2>References</h2>
+            <p class="text-justify">
+                <b>[1]</b> C. Bishop. <a href="https://www.microsoft.com/en-us/research/people/cmbishop/prml-book/">Pattern Recognition and Machine Learning</a>. Springer (2006).
+            </p>
+        </div>
+    </div>
+
+</div>
+</body>
+
+</html>
