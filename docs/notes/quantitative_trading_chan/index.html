@@ -74,7 +74,6 @@
                 "When I first started as an independent trader, it took me only three months to find and backtest my first new strategy, set up a new brokerage account with $100,000 capital, implement the execution system, and start trading the strategy. The strategy immediately became profitable in the first month."
               </p>
 
-              <!-- <image src="figures/born-again-nn-01.png" class="img-responsive" alt="overview" style="height: 200px; display: block; margin-left: auto; margin-right: auto;"></image> -->
               <!-- <p>
                 <a href="https://www.tradingview.com/script/mB5mPinP-Rsi-Machine-30MIN/">RSI Machine [30MIN] by wielkieef</a>
               </p> -->
@@ -85,7 +84,59 @@
         <table class="homepage"><tbody>
           <tr style="padding:0px">
             <td style="padding:2.5%;width:63%;vertical-align:middle">
-              <heading>The Whats, Whos, and Whys of Quantitative Trading</heading>
+              <heading>Fishing for Ideas</heading>
+
+              <p>
+                "Finding a trading idea is actually not the hardest part of building a quantitative trading business."
+              </p>
+
+              <p>
+                "In the past, because of my own academic bent, I regularly perused the various preprints published by business school professors or downloaded the latest online finance journal articles to scan for good prospective strategies. In fact, the first strategy I traded when I became independent was based on such academic research. (It was a version of the PEAD strategy referenced in Chapter 7.)"
+              </p>
+
+              <p>
+                "The difficulty is not the lack of ideas. The difficulty is to develop a taste for which strategy is suitable for your personal circumstances and goals, and which ones look viable even before you devote the time to diligently backtest them."
+              </p>
+
+              <image src="figures/quantitative_trading_chan-02.png" class="img-responsive" alt="overview" style="height: 360px; display: block; margin-left: auto; margin-right: auto;"></image>
+
+              <p>
+                <b>Your Goal.</b> "There is a misconception aired by some investment advisers, though, that if your goal is to achieve maximum long-term capital growth, then the best strategy is a buy-and-hold one. This notion has been shown to be mathematically false. In reality, maximum long-term growth is achieved by finding a strategy with the maximum Sharpe ratio (defined in the next section), provided that you have access to sufficiently high leverage. Therefore, comparing a short-term strategy with a very short holding period, small annual return, but very high Sharpe ratio, to a long-term strategy with a long holding period, high annual return, but lower Sharpe ratio, it is still preferable to choose the short-term strategy even if your goal is long-term growth."
+              </p>
+
+              <p>
+                <b>How Does It Compare with a Benchmark and How Consistent Are Its Returns?</b> Information ratio (IR) is a measurement of portfolio returns above the returns of a benchmark to the volatility of those returns. It is defined as
+                \[ \text{IR} = \frac{\text{Average of Excess Returns}}{\text{Standard Deviation of Excess Returns}} \]
+                where
+                \[ \text{Excess Returns} = \text{Portfolio Returns} - \text{Benchmark Returns} \]
+              </p>
+
+              <p>
+                "If a strategy trades only a few times a year, chances are its Sharpe ratio won't be high... If a strategy has deep (e.g., more than 10 percent) or lengthy (e.g., four or more months) drawdowns, it is unlikely that it will have a high Sharpe ratio."
+              </p>
+
+              <image src="figures/quantitative_trading_chan-03.png" class="img-responsive" alt="overview" style="height: 300px; display: block; margin-left: auto; margin-right: auto;"></image>
+
+              <p>
+                "As a rule of thumb, any strategy that has a Sharpe ratio of less than 1 is not suitable as a stand-alone strategy. For a strategy that achieves profitability almost every month, its (annualized) Sharpe ratio is typically greater than 2. For a strategy that is profitable almost every day, its Sharpe ratio is usually greater than 3."
+              </p>
+
+              <p>
+                <b>How Deep and Long Is the Drawdown?</b> "The maximum drawdown and the maximum drawdown duration do not typically overlap over the same period."
+              </p>
+
+              <p>
+                <b>How Will Transaction Costs Affect the Strategy?</b> "Every time a strategy buys and sells a security, it incurs a transaction cost... There will also be the cost of liquidity — when you buy and sell securities at their market prices, you are paying the bid-ask spread... This effect on the market prices due to your own order is called market impact, and it can contribute to a large part of the total transaction cost when the security is not very liquid... Finally, there can be a delay between the time your program transmits an order to your brokerage and the time it is executed at the exchange."
+              </p>
+
+              <p>
+                <b>Does the Data Suffer from Survivorship Bias?</b> "A historical database of stock prices that does not include stocks that have disappeared due to bankruptcies, delistings, mergers, or acquisitions suffer from the so-called survivorship bias, because only "survivors" of those often unpleasant events remain in the database."
+              </p>
+
+              <p>
+                <b>Does the Strategy "Fly under the Radar" of Institutional Money Managers?</b> "You should look for those strategies that fly under the radar of most institutional investors, for example, strategies that have very low capacities because they trade too often, strategies that trade very few stocks ev- ery day, or strategies that have very infrequent positions. Those niches are the ones that are likely still to be profitable because they have not yet been completely arbitraged away by the gigantic hedge funds."
+              </p>
+
             </td>
           </tr>
         </tbody></table>
