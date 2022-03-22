@@ -141,6 +141,32 @@
           </tr>
         </tbody></table>
 
+        <table class="homepage"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <heading>Backtesting</heading>
+
+              <p>
+                <b>Are the Data Split and Dividend Adjusted?</b> When a company had its stocks split $N$ to $1$ with an ex-date of $T$, all the prices before $T$ need to be multiplied by $1/N$. When a company issued a dividend $d$ per share with an ex-date of $T$, all the prices before $T$ need to be multiplied by the number
+                \[ \frac{\text{Close}(T-1) - d}{\text{Close}(T-1)} \]
+              </p>
+
+              <p>
+                <b>Are the Data Survivorship Bias Free?</b> "One way to overcome this problem is to start collecting point-in-time data yourself for the benefit of your future backtest... Another way to lessen the impact of survivorship bias is to backtest your strategies on more recent data so that the results are not distorted by too many missing stocks."
+              </p>
+
+              <p>
+                <b>Does Your Strategy Use High and Low Data?</b> "A backtest that relies on high and low data is less reliable than one that relies on the open and close... The discrepencies of the open and close prices usually have less impact on backtest performance than the errors in the high and low prices, since the latter almost always inflate your backtest returns."
+              </p>
+
+              <p>
+                <b>Performance measurement.</b>
+              </p>
+
+            </td>
+          </tr>
+        </tbody></table>
+
         <!-- References -->
         <table class="homepage"><tbody>
           <tr style="padding:0px">
