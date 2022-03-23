@@ -3,7 +3,7 @@
 
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Calculating Sharpe Ratio for Long-Only Versus Market-Neutral Strategies</title>
+  <title>Calculating Maximum Drawdown and Maximum Drawdown Duration</title>
   <meta name="author" content="Wufei Ma">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,7 +34,7 @@
           <tr style="padding:0px">
             <td style="padding:2.5%;width:63%;vertical-align:middle">
               <p style="text-align: center;">
-                <name>Calculating Sharpe Ratio for Long-Only Versus Market-Neutral Strategies</name>
+                <name>Calculating Maximum Drawdown and Maximum Drawdown Duration</name>
               </p>
               <p style="text-align: center;">
                 <date>Mar 2022</date>
@@ -55,7 +55,7 @@
                 Reading notes for <i>Quantitative Trading</i> by Ernest P. Chan [1].
               </p>
               <p>
-                Calculating sharpe ratio for long-only versus market-neutral strategies.
+                Calculate maximum drawdown and maximum drawdown duration.
               </p>
             </td>
           </tr>
@@ -65,30 +65,31 @@
         <table class="homepage"><tbody>
           <tr style="padding:0px">
             <td style="padding:2.5%;width:63%;vertical-align:middle">
-              <heading>Sharpe Ratio of Long-Only and Market-Neutral Strategy</heading>
+              <heading>Maximum Drawdown and Maximum Drawdown Duration</heading>
 
               <p>
-                Let's calculate the Sharpe ratio of a trivial long-only strategy for IGE: buying and holding a share since the close of Nov 26, 2001, and selling it at close of Nov 14, 2007. Assume the average risk-free rate during this period is 4 percent per annum in this example.
+                Let's calculate the maximum drawdown and maximum drawdown duration of a market neutral strategy for IGE and SPY.
               </p>
 
               <pre><code>
-# Long-only
-daily_ige = (closes_ige[1:] - closes_ige[0:-1]) / closes_ige[0:-1]
-excess_returns = daily_ige - args.risk_free_rate/252
-long_only_sharpe = math.sqrt(252) * np.mean(excess_returns) / np.std(excess_returns)
-print(f'Long-only Sharpe ratio {long_only_sharpe:.4f}')
+def calculate_max_drawdown(cum_ret):
+    high_watermark = np.zeros(len(cum_ret), dtype=np.float32)
+    drawdown = np.zeros(len(cum_ret), dtype=np.float32)
+    drawdown_duration = np.zeros(len(cum_ret), dtype=np.int32)
+    for t in range(1, len(cum_ret)):
+        high_watermark[t] = max(high_watermark[t-1], cum_ret[t])
+        drawdown[t] = (1+high_watermark[t]) / (1+cum_ret[t]) - 1
+        if drawdown[t] <= 0:
+            drawdown_duration[t] = 0
+        else:
+            drawdown_duration[t] = drawdown_duration[t-1] + 1
+    return np.max(drawdown), np.max(drawdown_duration)
               </code></pre>
 
-              <pre><code>
-# Market-neutral
-daily_spy = (closes_spy[1:] - closes_spy[0:-1]) / closes_spy[0:-1]
-net_ret = (daily_ige - daily_spy) / 2
-market_neutral_sharpe = math.sqrt(252) * np.mean(net_ret) / np.std(net_ret)
-print(f'Market-neutral Sharpe ratio {market_neutral_sharpe:.4f}')
-              </code></pre>
+              <image src="figures/drawdown.png" class="img-responsive" alt="overview" style="height: 360px; display: block; margin-left: auto; margin-right: auto;"></image>
 
               <p>
-                Source code available at <a href="https://github.com/wufeim/algo-trading/blob/master/quantitative_trading_chan/sharpe_ratio.py">wufeim/algo-trading</a>.
+                Source code available at <a href="https://github.com/wufeim/algo-trading/blob/master/quantitative_trading_chan/max_drawdown.py">wufeim/algo-trading</a>.
               </p>
 
             </td>
