@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Calculating Sharpe Ratio for Long-Only Versus Market-Neutral Strategies</title>
+  <meta name="author" content="Wufei Ma">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta name="description" content="">
+  <meta property="og:url" content="https://wufeim.github.io/posts/ensemble/index.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="wufeim/Deep Ensembles" />
+  <meta property="og:description" content="A brief survey of deep ensembles." />
+
+  <link rel="stylesheet" type="text/css" href="../../css/style.css">
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-svg.js"></script>
+  <script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$']]
+    }
+  }
+  </script>
+</head>
+
+<body>
+<table class="homepage" style="max-width:800px; padding-top: 20px; padding-bottom: 10px;">
+  <tbody>
+    <tr style="padding:0px">
+      <td style="padding:0px">
+        <table class="homepage">
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <p style="text-align: center;">
+                <name>Calculating Sharpe Ratio for Long-Only Versus Market-Neutral Strategies</name>
+              </p>
+              <p style="text-align: center;">
+                <date>Mar 2022</date>
+              </p>
+              <p style="text-align: center;">
+                <a href="https://wufeim.github.io">Wufei Ma</a>
+              </p>
+            </td>
+          </tr>
+        </table>
+
+        <!-- Intro -->
+        <table class="homepage"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <heading>Abstract</heading>
+              <p>
+                Reading notes for <i>Quantitative Trading</i> by Ernest P. Chan [1].
+              </p>
+              <p>
+                Abstract here.
+              </p>
+            </td>
+          </tr>
+        </tbody></table>
+        <!-- Intro -->
+
+        <table class="homepage"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <heading>Long-Only Strategy</heading>
+
+              <p>
+                Let's calculate the Sharpe ratio of a trivial long-only strategy for IGE: buying and holding a share since the close of Nov 26, 2001, and selling it at close of Nov 14, 2007. Assume the average risk-free rate during this period is 4 percent per annum in this example.
+              </p>
+
+              <pre><code>
+# Long-only
+daily_ige = (closes_ige[1:] - closes_ige[0:-1]) / closes_ige[0:-1]
+excess_returns = daily_ige - args.risk_free_rate/252
+long_only_sharpe = math.sqrt(252) * np.mean(excess_returns) / np.std(excess_returns)
+print(f'Long-only Sharpe ratio {long_only_sharpe:.4f}')
+              </code></pre>
+
+              <pre><code>
+# Market-neutral
+daily_spy = (closes_spy[1:] - closes_spy[0:-1]) / closes_spy[0:-1]
+net_ret = (daily_ige - daily_spy) / 2
+market_neutral_sharpe = math.sqrt(252) * np.mean(net_ret) / np.std(net_ret)
+print(f'Market-neutral Sharpe ratio {market_neutral_sharpe:.4f}')
+              </code></pre>
+
+              <p>
+                Source code available at <a href="">wufeim/algo-trading</a>.
+              </p>
+
+            </td>
+          </tr>
+        </tbody></table>
+
+        <!-- References -->
+        <table class="homepage"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <heading>References</heading>
+              <p>
+                <b>[1]</b> Ernest P. Chan. <a href="http://www.epchan.com">Quantitative Trading</a>. Wiley Trading Series.
+            </td>
+          </tr>
+        </tbody></table>
+        <!-- References -->
+
+        <!-- Related Materials
+        <table class="homepage"><tbody>
+          <tr style="padding:0px">
+            <td style="padding:2.5%;width:63%;vertical-align:middle">
+              <heading>Related Work</heading>
+              <p>
+                <b>[1]</b> K. Schwarz, Y. Liao, M. Niemeyer, A. Geiger. GRAF: Generative radiance fields for 3D-aware image synthesis. In <i>NeurIPS</i>, 2020.
+              </p>
+            </td>
+          </tr>
+        </tbody></table>
+        Related Materials -->
+
+        <table class="homepage"><tbody>
+          <tr>
+            <td style="padding:0px">
+              <p style="text-align:center;font-size:14px;">
+                Copyright &copy; 2017-21 Wufei Ma
+              </p>
+            </td>
+          </tr>
+        </tbody></table>
+
+      </td>
+    </tr>
+  </tbody>
+</table>
+</body>
+
+</html>
