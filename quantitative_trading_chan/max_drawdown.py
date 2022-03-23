@@ -16,7 +16,6 @@ def parse_args():
     parser.add_argument('--hedge', type=str, default='SPY')
     parser.add_argument('--buy', type=str, default='2001-11-26')
     parser.add_argument('--sell', type=str, default='2007-11-14')
-    parser.add_argument('--risk_free_rate', type=float, default=0.04)
     return parser.parse_args()
 
 
