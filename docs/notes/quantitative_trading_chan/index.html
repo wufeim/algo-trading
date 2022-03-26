@@ -175,6 +175,22 @@
                 See <a href="drawdown.html">Calculating Maximum Drawdown and Maximum Drawdown Duration</a>.
               </p>
 
+              <p>
+                <b>Look-ahead bias.</b> "This error refers to the situation when you are using information that was available only at a time ahead of the instant the trade was made... How do we avoid look-ahead bias? Use lagged historical data for calculating signals at every opportunity."
+              </p>
+
+              <p>
+                <b>Data-snooping bias.</b> "The danger that backtest performance is inflated relative to the future performance of the strategy because we have overoptimized the parameters of the model based on transient noise in the historical data."
+              </p>
+
+              <p>
+                <b>Sample size.</b> "The most basic safeguard against data-snooping bias is to ensure that you have a sufficient amount of backtest data relative to the number of free parameters you want to optimize."
+              </p>
+              
+              <p>
+                <b>Out-of-sample testing.</b> "Divide your historical data into two parts. Save the second (more recent) part of the data for out-of-sample testing... A more rigorous (albeit more computationally intensive) method of out-of-sample testing is to use moving optimization of the parameters... The ultimate out-of-sample testing is familiar to many traders, and it is called paper trading."
+              </p>
+
             </td>
           </tr>
         </tbody></table>
